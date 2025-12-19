@@ -5,7 +5,6 @@ import { api } from '../services';
 import { useAuth } from '../context';
 import { CardProfile, Loading, EditProfileModal } from '../components';
 
-// Moved logic outside component
 const mapDataToUser = (data) => ({
   userId: data.user_id,
   firstName: data.first_name,

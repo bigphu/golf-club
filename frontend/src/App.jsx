@@ -37,7 +37,6 @@ const MainLayout = () => {
         <Background />
 
         {/* Main Content Area */}
-        {/* UPDATED: Added pt-[10vh] to compensate for the fixed Navbar */}
         <div className='grow w-full grid grid-cols-12 gap-8 auto-cols-max mt-[5vh] mb-[10vh]'>
           <Routes>
             {/* --- Public Routes --- */}
