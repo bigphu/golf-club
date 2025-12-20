@@ -31,3 +31,22 @@ exports.getDirectory = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getMembershipRequests = async (req, res) => {
+  try {
+    const requests = await User.getMembershipRequests();
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.manageMembershipRequest = async (req, res) => {
+  try {
+    const { requestId, status, comment } = req.body;
+    await User.manageMembershipRequest(req.user.id, { requestId, status, comment });
+    res.json({ message: 'Request processed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

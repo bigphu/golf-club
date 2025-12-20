@@ -29,14 +29,16 @@ const DirectoryLayout = () => {
 
   return (
     <>
-      <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center'>
-        <div className='font-outfit text-primary-accent text-6xl font-extrabold'>Directory</div>
+      <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center bg-transparent '>
+        <div className='font-outfit text-primary-accent text-6xl font-extrabold mb-4'>Directory</div>
         <div className='text-secondary-accent font-medium font-roboto'>Find members and open events</div>
+        
+        <div className='mt-6'>
+          <ViewToggle options={tabs} activeId={activeTab} onToggle={handleTabChange} />
+        </div>
       </div>
 
       <div className='col-start-4 col-span-6 flex flex-col gap-4 mt-4'>
-        <ViewToggle options={tabs} activeId={activeTab} onToggle={handleTabChange} />
-        
         {/* Shared Search Bar */}
         <SearchBar
           onSearch={setSearchQuery}

@@ -10,7 +10,8 @@ import {
   TournamentLayout, TournamentOverview, TournamentRoster, TournamentRequests,
   CreateTournament, CreateContent,
   DirectoryLayout, DirectoryMembers, DirectoryEvents,
-  InfoLayout, InfoDocuments, InfoNotifications
+  InfoLayout, InfoDocuments, InfoNotifications,
+  ManageRequests
 } from '@/pages';
 
 /**
@@ -75,7 +76,7 @@ const MainLayout = () => {
               </ProtectedRoute>
             } />
             
-            <Route path='/tournament/:id' element={
+            <Route path='/tournaments/:id' element={
               <ProtectedRoute>
                 <TournamentLayout />
               </ProtectedRoute>
@@ -97,6 +98,12 @@ const MainLayout = () => {
             <Route path="/create-content" element={
               <ProtectedRoute>
                 <CreateContent />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/manage-requests" element={
+              <ProtectedRoute>
+                <ManageRequests />
               </ProtectedRoute>
             } />
 

@@ -43,7 +43,7 @@ const Register = () => {
   return (
     <>
       <div className='col-start-2 col-span-10 flex flex-col items-center justify-center min-h-[10vh] p-8 pb-0'>
-        <div className='font-outfit text-primary-accent text-5xl font-extrabold'>Membership Application</div>
+        <div className='font-outfit text-primary-accent text-5xl font-extrabold mb-4'>Membership Application</div>
         <div className='text-secondary-accent font-medium font-roboto mt-2'>Join the club to participate in tournaments</div>
       </div>
 

@@ -6,6 +6,7 @@ export { default as Register } from './Register';
 export { default as Tournaments } from './Tournaments';
 export { default as CreateContent } from './CreateContent';
 export { default as CreateTournament } from './CreateTournament';
+export { default as ManageRequests } from './ManageRequests';
 
 export * from './directory';
 export * from './info-center';

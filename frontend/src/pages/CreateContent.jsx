@@ -40,7 +40,7 @@ const CreateContent = () => {
   return (
     <>
       <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center bg-transparent'>
-        <div className='font-outfit text-primary-accent text-6xl font-extrabold'>Info Center</div>
+        <div className='font-outfit text-primary-accent text-6xl font-extrabold mb-4'>Info Center</div>
         <div className='text-secondary-accent font-medium font-roboto'>Publish new club information</div>
       </div>
 

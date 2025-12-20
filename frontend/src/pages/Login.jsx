@@ -34,11 +34,11 @@ const Login = () => {
   return (
     <>
       <div className='col-start-2 col-span-10 flex flex-col items-center justify-center min-h-[10vh] p-8 pb-0'>
-        <div className='font-outfit text-primary-accent text-5xl font-extrabold'>
+        <div className='font-outfit text-primary-accent text-5xl font-extrabold mb-4'>
           Member Login
         </div>
         <div className='text-secondary-accent font-medium font-roboto mt-2'>
-          Access the Golf Club Manager Dashboard
+          Access the Golf Club Manager
         </div>
       </div>
 

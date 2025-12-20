@@ -39,8 +39,9 @@ const CreateTournament = () => {
 
   return (
     <>
-      <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center'>
-        <div className='font-outfit text-primary-accent text-6xl font-extrabold'>New Event</div>
+      <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center bg-transparent '>
+        <div className='font-outfit text-primary-accent text-6xl font-extrabold mb-4'>New Event</div>
+        <div className='text-secondary-accent font-medium font-roboto'>Publish a new tournament</div>
       </div>
 
       <div className='col-start-2 col-span-10 flex justify-start items-end mb-4'>
@@ -65,8 +66,8 @@ const CreateTournament = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <InputForm label="Max Players" name="maxParticipants" type="number" value={formData.maxParticipants} onChange={handleChange} placeholder="72" icon={Users} />
-            <InputForm label="Entry Fee ($)" name="entryFee" type="number" value={formData.entryFee} onChange={handleChange} placeholder="50.00" icon={DollarSign} />
+            <InputForm label="Max Players" name="maxParticipants" type="number" value={formData.maxParticipants} onChange={handleChange} placeholder="72" icon={Users} required />
+            <InputForm label="Entry Fee ($)" name="entryFee" type="number" value={formData.entryFee} onChange={handleChange} placeholder="50.00" icon={DollarSign} required />
           </div>
 
           <div className="flex flex-col gap-2">

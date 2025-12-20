@@ -1,7 +1,9 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Compass, LayoutDashboard, Trophy, Bell, LogOut, User } from 'lucide-react';
+import { Home, Compass, LayoutDashboard, Trophy, Bell, LogOut, User, ShieldAlert } from 'lucide-react';
+
 import { useAuth } from '@/context';
+import { RoleGuard } from '@/components';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -20,7 +22,7 @@ const Navbar = () => {
   const getLinkClass = ({ isActive }) => isActive ? `${baseLinkClass} text-txt-light underline` : `${baseLinkClass} text-txt-placeholder hover:text-txt-light`;
 
   // Display Label Logic
-  const roleLabel = user?.role === 'ADMIN' ? 'Organizer' : 'Member';
+  const roleLabel = user?.role;
 
   return (
     // UPDATED: fixed positioning, explicit 10vh height, removed mb-auto
@@ -42,6 +44,10 @@ const Navbar = () => {
               <li><NavLink to='/directory' className={getLinkClass}><Compass size={18} /><span>Directory</span></NavLink></li>
               <li><NavLink to='/info-center' className={getLinkClass}><LayoutDashboard size={18} /><span>Info Center</span></NavLink></li>
               <li><NavLink to='/tournaments' className={getLinkClass}><Trophy size={18} /><span>Tournaments</span></NavLink></li>
+
+              <RoleGuard allowedRoles={['ADMIN']}> 
+                <li><NavLink to='/manage-requests' className={getLinkClass}><ShieldAlert size={18} /><span>Manage Requests</span></NavLink></li>
+              </RoleGuard>
             </ul>
           </div>
         )}

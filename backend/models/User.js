@@ -61,6 +61,21 @@ class User {
     const [results] = await db.query('CALL get_directory_users()');
     return results[0];
   }
+
+  static async getMembershipRequests() {
+    const [results] = await db.query('CALL get_pending_membership_requests()');
+    return results[0];
+  }
+
+  static async manageMembershipRequest(adminId, { requestId, status, comment }) {
+    const [results] = await db.query('CALL process_membership_request(?, ?, ?, ?)', [
+      adminId,
+      requestId,
+      status,
+      comment || null
+    ]);
+    return results[0];
+  }
 }
 
 module.exports = User;

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { List, Plus } from 'lucide-react'; 
+import { List, Plus, RefreshCcw } from 'lucide-react'; 
 
-import { useAuth } from '../context'; 
-import { api } from '../services';
-import { useDataFilter } from '../hooks';
-import { Tray, SearchBar, CardTournament, Loading, Button } from '../components';
+import { useAuth } from '@/context'; 
+import { api } from '@/services';
+import { useDataFilter } from '@/hooks';
+import { Tray, SearchBar, CardTournament, Loading, Button } from '@/components';
+import { RoleGuard } from '../components';
 
 const STATUS_RANK = { 'ONGOING': 3, 'UPCOMING': 2, 'FINISHED': 1, 'CANCELED': 0 };
 
@@ -22,38 +23,37 @@ const Tournaments = () => {
 
   const isAdmin = user?.role === 'ADMIN';
 
-  useEffect(() => {
-    const fetchTournaments = async () => {
-      try {
-        setIsLoading(true);
-        const data = await api.get('/tournaments?filter=mine', token);
-        
-        // We ensure the flat 'title' and 'status' properties exist for the hook
-        const formatted = data.map(t => ({
-          title: t.name,
+  const fetchTournaments = async () => {
+    try {
+      setIsLoading(true);
+      const data = await api.get('/tournaments?filter=mine', token);
+      
+      const formatted = data.map(t => ({
+        title: t.name,
+        status: t.status,
+        startDate: t.start_date, 
+        raw: {
+          tournamentId: t.tournament_id,
+          name: t.name,
+          description: t.description,
           status: t.status,
-          startDate: t.start_date, // needed for sorting
-          raw: {
-            tournamentId: t.tournament_id,
-            name: t.name,
-            description: t.description,
-            status: t.status,
-            location: t.location,
-            imageUrl: t.image_url,
-            startDate: t.start_date,
-            endDate: t.end_date,
-            myStatus: t.my_status || null 
-          },
-          creatorName: t.creator_name,
-        }));
-        setTournaments(formatted);
-      } catch (error) { 
-        console.error("Failed to fetch tournaments:", error); 
-      } finally { 
-        setIsLoading(false); 
-      }
-    };
+          location: t.location,
+          imageUrl: t.image_url,
+          startDate: t.start_date,
+          endDate: t.end_date,
+          myStatus: t.my_status || null 
+        },
+        creatorName: t.creator_name,
+      }));
+      setTournaments(formatted);
+    } catch (error) { 
+      console.error("Failed to fetch tournaments:", error); 
+    } finally { 
+      setIsLoading(false); 
+    }
+  };
 
+  useEffect(() => {
     if (token) fetchTournaments();
   }, [token]);
 
@@ -62,7 +62,7 @@ const Tournaments = () => {
     tournaments,
     { searchQuery, sortBy, sortDirection },
     {
-      searchKeys: ['title'], // Search specifically in the title
+      searchKeys: ['title'],
       sortStrategies: {
         'Status': (a, b) => (STATUS_RANK[b.status] || 0) - (STATUS_RANK[a.status] || 0),
         'Title': (a, b) => a.title.localeCompare(b.title),
@@ -74,7 +74,7 @@ const Tournaments = () => {
   return (
     <>
       <div className='col-start-2 col-span-10 flex flex-col min-h-[10vh] p-8 pb-0 items-center justify-center bg-transparent '>
-        <div className='font-outfit text-primary-accent text-6xl font-extrabold'>My Tournaments</div>
+        <div className='font-outfit text-primary-accent text-6xl font-extrabold mb-4'>My Tournaments</div>
         <div className='text-secondary-accent font-medium font-roboto'>Events you are organizing or participating in</div>
       </div>
 
@@ -90,11 +90,11 @@ const Tournaments = () => {
       </div>
       
       <div className='col-start-2 col-span-10 flex justify-end items-end'>
-        {isAdmin && (
+        <RoleGuard allowedRoles={['ADMIN']}> 
           <Button variant='primary' onClick={() => navigate('/create-tournament')} className="flex items-center gap-2">
             <Plus size={18} /> New Tournament
           </Button>
-        )}
+        </RoleGuard>
       </div>
 
       <Tray 
@@ -102,11 +102,19 @@ const Tournaments = () => {
         size='col-span-10' 
         variant='grid' 
         title={
-            <div className="flex items-center gap-2 pb-4 mb-2 border-b border-gray-100">
-                <List className="text-primary-accent" size={24} />
-                <h2 className="text-2xl font-bold font-outfit text-primary-accent">
-                    Your Events
-                </h2>
+            <div className="flex items-center justify-between pb-4 mb-2 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                    <List className="text-primary-accent" size={24} />
+                    <h2 className="text-2xl font-bold font-outfit text-primary-accent">
+                        Your Events
+                        <span className="text-lg bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full ml-3 border border-gray-200">
+                            {processedList.length}
+                        </span>
+                    </h2>
+                </div>
+                <Button variant="ghost" onClick={fetchTournaments} disabled={isLoading}>
+                    <RefreshCcw size={18} className={isLoading ? 'animate-spin' : ''}/>
+                </Button>
             </div>
         }
       >
