@@ -56,3 +56,26 @@ exports.manage = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Add to tournamentController.js
+exports.updateTournament = async (req, res) => {
+  try {
+    const tournamentId = req.params.id;
+    const userId = req.user.id;
+
+    // 1. Fetch current details to check ownership
+    const current = await Tournament.getDetails(tournamentId);
+    if (!current) return res.status(404).json({ error: 'Tournament not found' });
+
+    // 2. Authorization: Only the creator or an Admin can edit
+    if (current.creator_id !== userId && req.user.role !== 'ADMIN') {
+      return res.status(403).json({ error: 'Unauthorized to edit this tournament' });
+    }
+
+    // 3. Perform update
+    const updated = await Tournament.update(tournamentId, req.body);
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Type, MapPin, Calendar, Users, DollarSign, ListOrdered, Image as ImageIcon } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Trophy, Type, MapPin, Calendar, Users, DollarSign, ListOrdered, AlignLeft, Edit3, Eye, Image as ImageIcon } from 'lucide-react';
 
 import { useAuth } from '../context';
 import { api } from '../services';
@@ -12,6 +14,7 @@ const CreateTournament = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isPreview, setIsPreview] = useState(false);
 
   const [formData, handleChange] = useForm({
     name: '', description: '', location: '', startDate: '', endDate: '',
@@ -71,8 +74,39 @@ const CreateTournament = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold font-outfit text-txt-primary uppercase">Description</label>
-            <textarea name="description" rows="4" value={formData.description} onChange={handleChange} className="w-full p-4 rounded-xl border border-txt-dark bg-surface outline-none" placeholder="Rules and details..." required />
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-bold font-outfit text-txt-primary uppercase tracking-wider">
+                {isPreview ? "Description Preview" : "Description (Markdown)"}
+              </label>
+              <Button 
+                type="button" 
+                variant="secondary" 
+                size="sm" 
+                onClick={() => setIsPreview(!isPreview)}
+                className="flex gap-2 h-8 py-0"
+                >
+                {isPreview ? <Edit3 size={14} /> : <Eye size={14} />}
+                <span className="text-xs">{isPreview ? "Show Editor" : "Show Preview"}</span>
+              </Button>
+            </div>
+            
+            {!isPreview ? (
+              <InputForm 
+                name="description" 
+                type="textarea" 
+                value={formData.description} 
+                onChange={handleChange} 
+                placeholder="## Rules..."
+                icon={AlignLeft}
+                required 
+              />
+            ) : (
+              <div className="p-6 border border-gray-100 rounded-xl bg-gray-50/50 min-h-[300px] overflow-y-auto prose max-w-none font-roboto animate-fadeIn">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {formData.description || "*No description provided.*"}
+                </ReactMarkdown>
+              </div>
+            )}
           </div>
 
           <Button type="submit" isLoading={isLoading} className="w-full">Create Tournament</Button>

@@ -250,4 +250,36 @@ BEGIN
     SELECT v_user_id as processed_user_id;
 END //
 
+-- Add this to 02_procedures.sql
+DROP PROCEDURE IF EXISTS update_tournament //
+CREATE PROCEDURE update_tournament(
+    IN p_tournament_id INT,
+    IN p_name VARCHAR(200),
+    IN p_description TEXT,
+    IN p_location VARCHAR(255),
+    IN p_start_date DATETIME,
+    IN p_end_date DATETIME,
+    IN p_format VARCHAR(50),
+    IN p_max_participants INT,
+    IN p_entry_fee DECIMAL(15, 2),
+    IN p_image_url VARCHAR(255)
+)
+BEGIN
+    UPDATE tournaments 
+    SET 
+        name = p_name,
+        description = p_description,
+        location = p_location,
+        start_date = p_start_date,
+        end_date = p_end_date,
+        format = p_format,
+        max_participants = p_max_participants,
+        entry_fee = p_entry_fee,
+        image_url = p_image_url
+    WHERE tournament_id = p_tournament_id;
+    
+    -- Return updated details
+    CALL get_tournament_details(p_tournament_id);
+END //
+
 DELIMITER ;

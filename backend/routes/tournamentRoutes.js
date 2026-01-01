@@ -6,6 +6,7 @@ const { verifyToken } = require('../middlewares/authMiddleware');
 router.get('/', verifyToken, tournamentController.getTournaments);
 router.post('/create', verifyToken, tournamentController.createTournament);
 router.get('/:id', verifyToken, tournamentController.getDetails);
+router.put('/:id', verifyToken, tournamentController.updateTournament);
 
 // Actions
 router.post('/register', verifyToken, tournamentController.register);

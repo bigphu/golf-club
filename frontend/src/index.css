@@ -1,31 +1,50 @@
 @import "tailwindcss";
+/* Add the typography plugin directly in CSS (Tailwind v4 standard) */
+@plugin "@tailwindcss/typography";
 
-/* 1. DEFINE YOUR THEME VARIABLES
-   By adding --color-*, Tailwind automatically creates bg-*, text-*, border-* classes.
-   By adding --font-*, Tailwind creates font-* classes.
-*/
 @theme {
   /* --- Fonts --- */
   --font-roboto: "Roboto", sans-serif;
   --font-outfit: "Outfit", sans-serif;
 
-  /* --- Brand Colors (from color.css) --- */
-  --color-primary: #0b1b43;          /* usage: bg-primary, text-primary */
-  --color-primary-accent: #032b91;   /* usage: bg-primary-accent */
-  --color-secondary-accent: #1488d8; /* usage: bg-secondary-accent */
+  /* --- Brand Colors --- */
+  --color-primary: #0b1b43;
+  --color-primary-accent: #032b91;
+  --color-secondary-accent: #1488d8;
   --color-background: #cad3d9;
   --color-surface: #ffffff;
   --color-border: #1488d8;
 
-  /* --- Text Colors (from typography.css) --- */
-  /* Renamed with 'txt-' prefix to avoid conflict with brand colors */
-  --color-txt-primary: #032b91;      /* usage: text-txt-primary */
-  --color-txt-accent: #1488d8;       /* usage: text-txt-accent */
+  /* --- Text Colors --- */
+  --color-txt-primary: #032b91;
+  --color-txt-accent: #1488d8;
   --color-txt-placeholder: #a7b2b9;
   --color-txt-dark: #33363f;
   --color-txt-light: #ffffff;
 }
 
 body {
-  zoom: 80%; /* Scales everything down to 80% */
+  zoom: 80%;
+}
+
+@layer base {
+  /* Target the .prose class used in TournamentOverview.jsx */
+  .prose h1 { 
+    @apply text-4xl font-bold mb-4 mt-6 text-txt-primary font-outfit; 
+  }
+  .prose h2 { 
+    @apply text-2xl font-bold mb-3 mt-5 text-txt-primary font-outfit; 
+  }
+  .prose h3 { 
+    @apply text-xl font-bold mb-2 mt-4 text-txt-primary font-outfit; 
+  }
+  .prose p { 
+    @apply mb-4 leading-relaxed font-roboto text-txt-dark; 
+  }
+  .prose ul { 
+    @apply list-disc ml-5 mb-4 text-txt-dark; 
+  }
+  .prose strong {
+    @apply font-bold text-txt-dark;
+  }
 }

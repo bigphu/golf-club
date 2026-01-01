@@ -20,6 +20,7 @@ const TournamentLayout = () => {
     try {
       const json = await api.get(`/tournaments/${id}`, token);
       setData(json);
+      console.log("Tournament details loaded:", json);
     } catch (err) { console.error(err); } 
     finally { setLoading(false); }
   };

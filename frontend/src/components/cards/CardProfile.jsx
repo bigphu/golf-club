@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { User, Edit3, ShieldCheck, Mail, Phone, Hash, Shirt } from 'lucide-react';
 import { Button } from '@/components';
 
@@ -53,9 +55,14 @@ const CardProfile = ({
           </div>
         </div>
 
-        <div className="text-txt-dark leading-relaxed font-roboto bg-gray-50 p-4 rounded-xl border border-gray-100 overflow-x-hidden">
-          <span className="text-xs font-bold uppercase text-txt-placeholder block mb-1">Bio</span>
-          {user.bio || "No details provided."}
+        <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:font-outfit prose-headings:text-txt-dark prose-a:text-primary-accent">
+          {user.bio ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {user.bio}
+            </ReactMarkdown>
+          ) : (
+            <span className="italic text-txt-placeholder text-sm">No details provided.</span>
+          )}
         </div>
 
         <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">

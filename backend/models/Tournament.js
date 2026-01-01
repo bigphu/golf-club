@@ -53,6 +53,27 @@ class Tournament {
       adminId, tournamentId, targetUserId, status
     ]);
   }
+
+  // Add to Tournament.js
+static async update(tournamentId, { name, description, startDate, endDate, location, maxParticipants, entryFee, format, imageUrl }) {
+  const [results] = await db.query(
+    'CALL update_tournament(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      tournamentId, 
+      name, 
+      description, 
+      location, 
+      startDate, 
+      endDate, 
+      format, 
+      maxParticipants, 
+      entryFee, 
+      imageUrl
+    ]
+  );
+  // The procedure returns the updated tournament details
+  return results[0][0];
+}
 }
 
 module.exports = Tournament;
