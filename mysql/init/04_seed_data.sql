@@ -3,23 +3,21 @@
 -- ==========================================================
 USE golf;
 
--- 1. Create Users
+-- 1. Create Users (Current Password for all: "hash123")
 -- Admin
 INSERT INTO users (user_id, email, password_hash, first_name, last_name, phone_number, bio, profile_pic_url, background_color_hex) 
-VALUES (1, 'admin@golf.com', 'hash123', 'Alice', 'Admin', '0909123456', 'Club Manager', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400', '#ef4444');
+VALUES (1, 'admin@golf.com', '$2b$10$8FAjEsay4MImp8eBtDG/FuRQMNGgPkz5iVT9D.kkGInswjZD0j0Rm', 'Alice', 'Admin', '0909123456', 'Club Manager', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400', '#ef4444');
 
 -- Member 1
 INSERT INTO users (user_id, email, password_hash, first_name, last_name, phone_number, vga_number, shirt_size, profile_pic_url, background_color_hex) 
-VALUES (2, 'vinh@test.com', 'hash123', 'Vinh', 'Nguyen', '0929093999', '990990', 'L', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400', '#3b82f6');
-
+VALUES (2, 'vinh@test.com', '$2b$10$8FAjEsay4MImp8eBtDG/FuRQMNGgPkz5iVT9D.kkGInswjZD0j0Rm', 'Vinh', 'Nguyen', '0929093999', '990990', 'L', 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400', '#3b82f6');
 -- Member 2
 INSERT INTO users (user_id, email, password_hash, first_name, last_name, phone_number, vga_number, shirt_size, profile_pic_url, background_color_hex) 
-VALUES (3, 'windy@test.com', 'hash123', 'Windy', 'Tran', '0909111222', '071054', 'XL', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400', '#10b981');
+VALUES (3, 'windy@test.com', '$2b$10$8FAjEsay4MImp8eBtDG/FuRQMNGgPkz5iVT9D.kkGInswjZD0j0Rm', 'Windy', 'Tran', '0909111222', '071054', 'XL', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400', '#10b981');
 
 -- Member 3
 INSERT INTO users (user_id, email, password_hash, first_name, last_name, phone_number, vga_number, shirt_size, profile_pic_url, background_color_hex) 
-VALUES (4, 'david@test.com', 'hash123', 'David', 'Kim', '0909123888', '112233', 'M', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', '#f59e0b');
-
+VALUES (4, 'david@test.com', '$2b$10$8FAjEsay4MImp8eBtDG/FuRQMNGgPkz5iVT9D.kkGInswjZD0j0Rm', 'David', 'Kim', '0909123888', '112233', 'M', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', '#f59e0b');
 -- 2. Assign Roles
 INSERT INTO admins (admin_id) VALUES (1);
 INSERT INTO members (member_id) VALUES (2), (3), (4);

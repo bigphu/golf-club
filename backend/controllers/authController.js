@@ -1,9 +1,16 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
+
+const SALT_ROUNDS = 10;
 
 exports.register = async (req, res) => {
   try {
-    await User.create(req.body);
+    // Hash password before storing
+    const hashedPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
+    
+    // Replace plain password with hashed version
+    await User.create({ ...req.body, password: hashedPassword });
     res.status(201).json({ message: 'Registration successful. Membership is pending approval.' });
   } catch (error) {
     console.error("Registration Error:", error);
@@ -18,8 +25,14 @@ exports.login = async (req, res) => {
     // 1. Find User
     const user = await User.findByEmail(email);
     
-    // 2. Validate Credentials (Plain text for demo as per your code)
-    if (!user || user.password_hash !== password) {
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // 2. Compare hashed password
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    
+    if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 

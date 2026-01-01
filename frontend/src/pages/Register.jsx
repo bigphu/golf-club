@@ -21,8 +21,18 @@ const Register = () => {
     setIsSubmitting(true);
     setError('');
 
-    if (formData.password !== formData.confirmPassword) return setError("Passwords do not match.");
-    if (formData.password.length < 6) return setError("Password must be at least 6 characters.");
+    // Validation - reset isSubmitting on early return
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const { confirmPassword, ...payload } = formData;
