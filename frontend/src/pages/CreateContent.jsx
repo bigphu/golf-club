@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, FileText, Layers, AlignLeft } from 'lucide-react';
+import { Bell, FileText, Layers, AlignLeft, Edit3, Eye } from 'lucide-react';
 
-import { useAuth } from '../context';
-import { api } from '../services';
-import { useForm } from '../hooks';
-import { Tray, Button, InputForm, InputSelect } from '../components';
+import { useAuth } from '@/context';
+import { api } from '@/services';
+import { useForm } from '@/hooks';
+import { Tray, Button, InputForm, InputSelect, MarkdownForm } from '@/components';
 
 const CreateContent = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isPreview, setIsPreview] = useState(false); // State for Markdown preview
 
   const [formData, handleChange] = useForm({
     title: '', contentType: 'NOTIFICATION', docType: 'BCN_BYLAW', content: ''
@@ -61,17 +62,15 @@ const CreateContent = () => {
 
           <InputForm label="Title / Subject" name="title" value={formData.title} onChange={handleChange} placeholder={isNotification ? "e.g. Course Maintenance Alert" : "e.g. 2024 Club Constitution"} required />
 
-          {isNotification && (
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold font-outfit text-txt-primary uppercase tracking-wider">Message Body <span className="text-red-500">*</span></label>
-              <div className="group w-full flex items-start gap-3 py-3 px-4 rounded-xl border border-txt-dark transition-all duration-200 focus-within:ring-2 focus-within:ring-offset-2 focus-within:border-txt-placeholder bg-surface">
-                  <div className="text-txt-dark mt-1"><AlignLeft size={20} /></div>
-                  <textarea name="content" rows="4" value={formData.content} onChange={handleChange} placeholder="Enter message here..." required className="w-full bg-transparent outline-none font-medium font-roboto text-txt-primary placeholder-txt-placeholder text-base resize-none"/>
-              </div>
-            </div>
-          )}
-
-          {!isNotification && <div className="p-4 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-roboto border border-emerald-100"><strong>Document Upload:</strong> Placeholder for file upload logic.</div>}
+          {/* Markdown Editor for both Notifications and Documents */}
+          <MarkdownForm 
+            label="Content"
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
+            placeholder="## Details..."
+            previewHeight="min-h-[150px] max-h-[300px]"
+          />
 
           <div className="flex justify-center gap-4 pt-4 border-t border-gray-100">
             <Button type="submit" isLoading={isLoading} className="w-full md:w-auto md:px-12">Publish Content</Button>

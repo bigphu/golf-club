@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Trophy, DollarSign, Users, User, Flag, Edit } from 'lucide-react';
+import { Trophy, DollarSign, Users, User, Flag, Edit, Calendar } from 'lucide-react';
 
 import { api } from '@/services';
 import { useAuth } from '@/context'; 
-import { Tray, Button, EditTournamentModal } from '@/components';
+import { Tray, Button, EditTournamentModal, StatBox } from '@/components';
 
 const TournamentOverview = () => {
-  // Pulling context from TournamentLayout
   const { data, refreshData, currentUser } = useOutletContext();
   const { token } = useAuth();
   const { details, participants } = data;
@@ -17,7 +16,6 @@ const TournamentOverview = () => {
   const [registering, setRegistering] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Determine user state
   const userRegistration = participants.find(p => p.user_id === currentUser.id);
   const isUpcoming = details.status === 'UPCOMING';
   const isHost = currentUser.id === details.creator_id;
@@ -38,10 +36,9 @@ const TournamentOverview = () => {
 
   const handleUpdate = async (updatedData) => {
     try {
-      // API call to the new PUT route created in the backend
       await api.put(`/tournaments/${details.tournament_id}`, updatedData, token);
       alert("Tournament updated successfully!");
-      await refreshData(); // Refresh Layout context
+      await refreshData(); 
       setIsEditing(false);
     } catch (error) {
       alert("Error updating tournament: " + error.message);
@@ -51,7 +48,6 @@ const TournamentOverview = () => {
   return (
     <>
       <Tray pos="col-start-2" size="col-span-10" variant="flex" className="relative">
-        {/* Host Edit Action */}
         {isHost && (
           <div className="absolute top-4 right-4 z-10">
             <Button 
@@ -75,7 +71,6 @@ const TournamentOverview = () => {
                 alt={details.name} 
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
               />
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" /> */}
             </div>
           </div>
 
@@ -91,14 +86,22 @@ const TournamentOverview = () => {
               </div>
               
               {/* Markdown Render Area */}
-              <div className="prose max-w-none text-left grow w-full overflow-y-auto max-h-[400px] pr-4 font-roboto scrollbar-thin scrollbar-thumb-gray-200">
+              <div className="prose max-w-none text-left grow w-full overflow-y-auto max-h-[300px] pr-4 font-roboto scrollbar-thin scrollbar-thumb-gray-200">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {details.description}
                 </ReactMarkdown>
               </div>
+
+              {/* NEW: Tournament Metrics in 2x2 Grid */}
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                <StatBox label="Format" value={details.format || 'Stroke Play'} icon={Trophy} />
+                <StatBox label="Entry Fee" value={`$${details.entry_fee}`} icon={DollarSign} />
+                <StatBox label="Availability" value={`${details.current_participants}/${details.max_participants} Slots`} icon={Users} />
+                <StatBox label="Organizer" value={details.creator_name} icon={User} />
+              </div>
               
               {/* Registration Logic */}
-              <div className="mt-6 pt-6 border-t border-gray-100">
+              <div className="mt-8 pt-6 border-t border-gray-100">
                 {!userRegistration ? (
                   isUpcoming ? (
                     <Button 
@@ -120,20 +123,11 @@ const TournamentOverview = () => {
                   </div>
                 )}
               </div>
-
-              {/* Tournament Metrics */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-                <StatBox label="Format" value={details.format || 'Stroke Play'} icon={Trophy} />
-                <StatBox label="Fee" value={`$${details.entry_fee}`} icon={DollarSign} />
-                <StatBox label="Slots" value={`${details.current_participants}/${details.max_participants}`} icon={Users} />
-                <StatBox label="Organized By" value={details.creator_name} icon={User} />
-              </div>
             </div>
           </div>
         </div>
       </Tray>
 
-      {/* Edit Modal Logic */}
       {isEditing && (
         <EditTournamentModal 
           tournament={details} 
@@ -144,16 +138,6 @@ const TournamentOverview = () => {
     </>
   );
 };
-
-// Helper Components
-const StatBox = ({ label, value, icon: Icon }) => (
-  <div className="p-3 bg-white rounded-xl border border-gray-100 flex flex-col items-center justify-center shadow-sm hover:border-primary-accent/30 transition-colors">
-    <div className="text-secondary-accent text-[9px] font-black uppercase flex items-center gap-1 mb-1.5 opacity-60">
-      <Icon size={11} className="text-primary-accent"/> {label}
-    </div>
-    <div className="font-bold text-txt-primary text-xs text-center leading-tight truncate w-full">{value}</div>
-  </div>
-);
 
 const getStatusStyle = (status) => {
   switch(status) {

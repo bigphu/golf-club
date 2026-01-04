@@ -23,7 +23,7 @@ const Profile = () => {
   const { token, user: currentUser } = useAuth();
   
   const [userProfile, setUserProfile] = useState(null);
-  const [stats, setStats] = useState({ tournaments: 0, documents: 0 });
+  const [stats, setStats] = useState({ tournaments: 0 });
   const [role, setRole] = useState('Member');
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -36,8 +36,7 @@ const Profile = () => {
         const data = await api.get(endpoint, token);
 
         setStats({
-          tournaments: data.stat_tournaments || 0,
-          documents: data.stat_documents_read || 0
+          tournaments: data.stat_tournaments || 0
         });
         setRole(data.role); 
         setUserProfile(mapDataToUser(data));

@@ -11,6 +11,7 @@ import {
   CreateTournament, CreateContent,
   DirectoryLayout, DirectoryMembers, DirectoryEvents,
   InfoLayout, InfoDocuments, InfoNotifications,
+  DocumentDetail, NotificationDetail,
   ManageRequests
 } from '@/pages';
 
@@ -67,6 +68,9 @@ const MainLayout = () => {
               <Route index element={<InfoDocuments />} />
               <Route path='documents' element={<Navigate to="." replace />} />
               <Route path='notifications' element={<InfoNotifications />} />
+
+              <Route path='notifications/:id' element={<NotificationDetail />} />
+              <Route path='documents/:id' element={<DocumentDetail />} />
             </Route>
 
             {/* Tournament Routes */}

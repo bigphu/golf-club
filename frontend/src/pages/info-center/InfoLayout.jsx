@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
-import { Layers, Bell, Plus } from 'lucide-react'; 
+import { Layers, Bell } from 'lucide-react'; 
 
 import { useAuth } from '@/context';
-import { api } from '@/services'; // Added api import
-import { Button, ViewToggle, RoleGuard, Loading } from '@/components'; // Added Loading
+import { api } from '@/services';
+import { ViewToggle, Loading } from '@/components';
 
 const InfoLayout = () => {
-  const { user, token } = useAuth(); // Added token
+  const { user, token } = useAuth(); //
   const navigate = useNavigate();
   const location = useLocation();
 
-  // State for data lifting
   const [docs, setDocs] = useState([]);
   const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all data at layout level
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -37,7 +35,6 @@ const InfoLayout = () => {
     if (token) fetchData();
   }, [token]);
 
-  // Determine active tab
   const currentPath = location.pathname.split('/').pop();
   const activeTab = currentPath === 'info-center' ? 'documents' : currentPath;
 
@@ -45,7 +42,6 @@ const InfoLayout = () => {
     navigate(id === 'documents' ? '/info-center' : `/info-center/${id}`);
   };
 
-  // Dynamic tabs with counts
   const tabs = [
     { id: 'documents', label: `Documents (${docs.length})`, icon: Layers },
     { id: 'notifications', label: `Notifications (${notifs.length})`, icon: Bell }
@@ -63,19 +59,11 @@ const InfoLayout = () => {
         </div>
       </div>
 
-      {/* Admin Action Button - Context Aware */}
-      <div className='col-start-2 col-span-10 flex justify-end items-end h-10'>
-        <RoleGuard allowedRoles={['ADMIN']}> 
-          <Button variant='primary' onClick={() => navigate(`/create-content`)} className="flex items-center gap-2 animate-fadeIn">
-            <Plus size={18} /> Create {activeTab === 'documents' ? 'Doc' : 'Notif'}
-          </Button>
-        </RoleGuard>
-      </div>
-
-      {/* Page Content - Pass data down via Context */}
+      {/* Passing currentUser in context for consistency with TournamentLayout */}
       <Outlet context={{ 
         rawDocs: docs, 
         rawNotifs: notifs, 
+        currentUser: user, 
         refreshInfo: fetchData 
       }} />
     </>

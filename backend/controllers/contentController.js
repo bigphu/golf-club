@@ -24,3 +24,19 @@ exports.createContent = async (req, res) => {
     res.json({ message: 'Content created successfully' });
   } catch (error) { res.status(400).json({ error: error.message }); }
 };
+
+exports.updateContent = async (req, res) => {
+  try {
+    if (req.user.role !== 'ADMIN') return res.status(403).json({ error: 'Admins only' });
+    const { id } = req.params;
+    const { type, ...data } = req.body;
+
+    let updated;
+    if (type === 'DOCUMENT') {
+      updated = await Content.updateDocument(id, data);
+    } else {
+      updated = await Content.updateNotification(id, data);
+    }
+    res.json({ message: 'Updated successfully', data: updated });
+  } catch (error) { res.status(400).json({ error: error.message }); }
+};

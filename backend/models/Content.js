@@ -13,16 +13,26 @@ class Content {
 
   static async create(type, { title, content, docType, authorId }) {
     if (type === 'DOCUMENT') {
-      return db.query(
-        'INSERT INTO documents (title, type, author_id) VALUES (?, ?, ?)', 
-        [title, docType || 'BCN_BYLAW', authorId]
+      return await db.query(
+        'CALL create_document(?, ?, ?, ?)', 
+        [title, content, docType || 'BCN_BYLAW', authorId]
       );
     } else {
-      return db.query(
-        'INSERT INTO notifications (title, content, author_id) VALUES (?, ?, ?)', 
+      return await db.query(
+        'CALL create_notification(?, ?, ?)',
         [title, content, authorId]
       );
     }
+  }
+
+  static async updateDocument(id, { title, content, docType }) {
+    const [results] = await db.query('CALL update_document(?, ?, ?, ?)', [id, title, content, docType]);
+    return results[0][0];
+  }
+
+  static async updateNotification(id, { title, content }) {
+    const [results] = await db.query('CALL update_notification(?, ?, ?)', [id, title, content]);
+    return results[0][0];
   }
 }
 

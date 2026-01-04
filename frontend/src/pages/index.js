@@ -11,3 +11,4 @@ export { default as ManageRequests } from './ManageRequests';
 export * from './directory';
 export * from './info-center';
 export * from './tournament-detail';
+export * from './content-detail';

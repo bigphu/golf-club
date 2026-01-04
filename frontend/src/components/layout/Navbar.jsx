@@ -56,7 +56,7 @@ const Navbar = () => {
         <div className='flex items-center gap-4'>
           {user ? (
             <>
-              <button type='button' className='text-txt-placeholder hover:text-txt-light active:text-secondary-accent'><Bell className="h-6 w-6" /></button>
+              {/* <button type='button' className='text-txt-placeholder hover:text-txt-light active:text-secondary-accent'><Bell className="h-6 w-6" /></button> */}
               
               <div className='flex items-center gap-3 pl-2 pr-1 border-l border-white/10 cursor-pointer hover:opacity-80 transition-opacity group' onClick={() => navigate(`/profile`)}>
                 <div className='text-right hidden lg:block'>

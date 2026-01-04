@@ -3,10 +3,8 @@ import {
   X, User, Phone, Hash, Shirt, Image as ImageIcon, 
   Palette, AlignLeft, Eye, Edit3 
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
-import { Tray, Button, InputForm, InputSelect } from '@/components';
+import { Tray, Button, InputForm, InputSelect, MarkdownForm } from '@/components';
 
 const EditProfileModal = ({ user, onClose, onSave }) => {
   // Initialize state with existing user data
@@ -93,40 +91,14 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
           </div>
 
           {/* Enhanced Bio with Markdown Preview Toggle */}
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <label className="text-sm font-bold font-outfit text-txt-primary uppercase tracking-wider">
-                {isPreview ? "Bio Preview" : "Bio (Markdown)"}
-              </label>
-              <Button 
-                type="button" 
-                variant="secondary" 
-                size="sm" 
-                onClick={() => setIsPreview(!isPreview)}
-                className="flex gap-2 h-8 py-0"
-                >
-                {isPreview ? <Edit3 size={14} /> : <Eye size={14} />}
-                <span className="text-xs">{isPreview ? "Show Editor" : "Show Preview"}</span>
-              </Button>
-            </div>
-
-            {!isPreview ? (
-              <InputForm 
-              name="bio" 
-              type="textarea"
-              value={formData.bio} 
-              onChange={handleChange} 
-              placeholder="Tell us about your golf experience..." 
-              icon={AlignLeft} 
-              />
-            ) : (
-              <div className="p-4 border border-gray-100 rounded-xl bg-gray-50/50 min-h-[150px] max-h-[300px] overflow-y-auto prose prose-sm max-w-none font-roboto animate-fadeIn">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {formData.bio || "*No bio provided.*"}
-                </ReactMarkdown>
-              </div>
-            )}
-          </div>
+          <MarkdownForm 
+            label="Bio"
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            placeholder="Tell us about yourself..."
+            previewHeight="min-h-[150px] max-h-[300px]"
+          />
 
           {/* Footer Actions */}
           <div className="col-span-full flex flex-row gap-4 mt-4 pt-4 border-t border-gray-100">

@@ -48,17 +48,17 @@ CREATE TABLE membership_requests (
     FOREIGN KEY (processed_by) REFERENCES admins(admin_id)
 );
 
--- 1.4 Promotions & Benefits
-CREATE TABLE promotions (
-    promotion_id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    description TEXT,
-    discount_amount VARCHAR(100), 
-    image_url VARCHAR(255),
-    valid_from DATE,
-    valid_to DATE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+-- -- 1.4 Promotions & Benefits
+-- CREATE TABLE promotions (
+--     promotion_id INT AUTO_INCREMENT PRIMARY KEY,
+--     title VARCHAR(200) NOT NULL,
+--     description TEXT,
+--     discount_amount VARCHAR(100), 
+--     image_url VARCHAR(255),
+--     valid_from DATE,
+--     valid_to DATE,
+--     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+-- );
 
 -- 1.5 Content Tables
 CREATE TABLE documents (
@@ -114,13 +114,13 @@ CREATE TABLE tournament_participants (
 );
 
 -- 1.7 Stats Tracking
-CREATE TABLE document_reads (
-    read_id INT AUTO_INCREMENT PRIMARY KEY,
-    member_id INT NOT NULL,
-    document_id INT NOT NULL,
-    read_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_id) REFERENCES users(user_id),
-    FOREIGN KEY (document_id) REFERENCES documents(document_id)
-);
+-- CREATE TABLE document_reads (
+--     read_id INT AUTO_INCREMENT PRIMARY KEY,
+--     member_id INT NOT NULL,
+--     document_id INT NOT NULL,
+--     read_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (member_id) REFERENCES users(user_id),
+--     FOREIGN KEY (document_id) REFERENCES documents(document_id)
+-- );
 
 SET FOREIGN_KEY_CHECKS = 1;

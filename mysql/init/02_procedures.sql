@@ -38,8 +38,8 @@ CREATE PROCEDURE get_user_full_profile(IN p_user_id INT)
 BEGIN
     SELECT u.*,
         CASE WHEN a.admin_id IS NOT NULL THEN 'ADMIN' WHEN m.member_id IS NOT NULL THEN 'MEMBER' ELSE 'GUEST' END as role,
-        (SELECT COUNT(*) FROM tournament_participants tp WHERE tp.user_id = u.user_id) as stat_tournaments,
-        (SELECT COUNT(*) FROM document_reads dr WHERE dr.member_id = u.user_id) as stat_documents_read 
+        (SELECT COUNT(*) FROM tournament_participants tp WHERE tp.user_id = u.user_id) as stat_tournaments
+        -- (SELECT COUNT(*) FROM document_reads dr WHERE dr.member_id = u.user_id) as stat_documents_read 
     FROM users u
     LEFT JOIN admins a ON u.user_id = a.admin_id
     LEFT JOIN members m ON u.user_id = m.member_id
@@ -88,13 +88,11 @@ CREATE PROCEDURE create_tournament(
 BEGIN
     INSERT INTO tournaments (
         creator_id, name, description, start_date, end_date, 
-        location, max_participants, entry_fee, format, image_url, 
-        status
+        location, max_participants, entry_fee, format, image_url
     ) VALUES (
         p_creator_id, p_name, p_description, p_start_date, p_end_date, 
         p_location, p_max_participants, p_entry_fee, p_format, 
-        IFNULL(p_image_url, 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800'), 
-        'UPCOMING'
+        IFNULL(p_image_url, 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800')
     );
     
     -- Auto-register the creator as a participant (Approved)
@@ -241,16 +239,10 @@ BEGIN
         admin_comment = p_comment 
     WHERE request_id = p_request_id;
     
-    -- 3. If Approved, insert into members table (Promote from Guest)
-    IF p_status = 'APPROVED' THEN
-        INSERT IGNORE INTO members (member_id) VALUES (v_user_id);
-    END IF;
-    
-    -- 4. Return the updated user ID for confirmation
+    -- 3. Return the updated user ID for confirmation
     SELECT v_user_id as processed_user_id;
 END //
 
--- Add this to 02_procedures.sql
 DROP PROCEDURE IF EXISTS update_tournament //
 CREATE PROCEDURE update_tournament(
     IN p_tournament_id INT,
@@ -280,6 +272,92 @@ BEGIN
     
     -- Return updated details
     CALL get_tournament_details(p_tournament_id);
+END //
+
+-- Update existing Document
+DROP PROCEDURE IF EXISTS update_document //
+CREATE PROCEDURE update_document(
+    IN p_document_id INT,
+    IN p_title VARCHAR(200),
+    IN p_content TEXT,
+    IN p_type ENUM('BCN_BYLAW', 'BENEFIT')
+)
+BEGIN
+    UPDATE documents 
+    SET title = p_title, content = p_content, type = p_type, updated_at = NOW()
+    WHERE document_id = p_document_id;
+    
+    -- Return updated view
+    SELECT d.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM documents d JOIN users u ON d.author_id = u.user_id 
+    WHERE d.document_id = p_document_id;
+END //
+
+-- Update existing Notification
+DROP PROCEDURE IF EXISTS update_notification //
+CREATE PROCEDURE update_notification(
+    IN p_notification_id INT,
+    IN p_title VARCHAR(200),
+    IN p_content TEXT
+)
+BEGIN
+    UPDATE notifications 
+    SET title = p_title, content = p_content
+    WHERE notification_id = p_notification_id;
+    
+    -- Return updated view
+    SELECT n.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM notifications n JOIN users u ON n.author_id = u.user_id 
+    WHERE n.notification_id = p_notification_id;
+END //
+
+DROP PROCEDURE IF EXISTS create_document //
+CREATE PROCEDURE create_document(
+    IN p_title VARCHAR(200),
+    IN p_content TEXT,
+    IN p_type ENUM('BCN_BYLAW', 'BENEFIT'),
+    IN p_author_id INT
+)
+BEGIN
+    INSERT INTO documents (title, content, type, author_id)
+    VALUES (p_title, p_content, p_type, p_author_id);
+    
+    -- Return the newly created document
+    SELECT d.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM documents d JOIN users u ON d.author_id = u.user_id 
+    WHERE d.document_id = LAST_INSERT_ID();
+END //
+
+DROP PROCEDURE IF EXISTS create_notification //
+CREATE PROCEDURE create_notification(
+    IN p_title VARCHAR(200),
+    IN p_content TEXT,
+    IN p_author_id INT
+)
+BEGIN
+    INSERT INTO notifications (title, content, author_id)
+    VALUES (p_title, p_content, p_author_id);
+    
+    -- Return the newly created notification
+    SELECT n.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM notifications n JOIN users u ON n.author_id = u.user_id 
+    WHERE n.notification_id = LAST_INSERT_ID();
+END //
+
+DROP PROCEDURE IF EXISTS get_document_details //
+CREATE PROCEDURE get_document_details(IN p_document_id INT)
+BEGIN
+    SELECT d.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM documents d JOIN users u ON d.author_id = u.user_id 
+    WHERE d.document_id = p_document_id;
+END //
+
+DROP PROCEDURE IF EXISTS get_notification_details //
+CREATE PROCEDURE get_notification_details(IN p_notification_id INT)
+BEGIN
+    SELECT n.*, CONCAT(u.first_name, ' ', u.last_name) as author_name 
+    FROM notifications n JOIN users u ON n.author_id = u.user_id 
+    WHERE n.notification_id = p_notification_id;
 END //
 
 DELIMITER ;
