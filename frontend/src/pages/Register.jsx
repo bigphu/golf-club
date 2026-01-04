@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Phone, Image as ImageIcon, Palette, Lock, AlignLeft, Hash, Shirt } from 'lucide-react';
 
-import { api } from '../services';
-import { useForm } from '../hooks';
-import { Tray, Button, InputForm, InputSelect } from '../components';
+import { api } from '@/services';
+import { useForm } from '@/hooks';
+import { Tray, Button, InputForm, InputSelect, MarkdownForm } from '@/components';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -58,37 +58,51 @@ const Register = () => {
       </div>
 
       <Tray pos='col-start-3' size='col-span-8' className='mt-4 mb-10'>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full px-4 py-2">
-          {error && <div className="col-span-full bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-200">{error}</div>}
+        <form onSubmit={handleSubmit} className="w-full px-4 py-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+            {error && <div className="col-span-full bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-200">{error}</div>}
 
-          {/* Left Column */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-txt-dark font-bold font-outfit border-b border-gray-100 pb-2">Personal Details</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <InputForm label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Jane" icon={User} required />
-              <InputForm label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Doe" required />
+            {/* Left Column */}
+            <div className="flex flex-col gap-6">
+              <h3 className="text-txt-dark font-bold font-outfit border-b border-gray-100 pb-2">Personal Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <InputForm label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Jane" icon={User} required />
+                <InputForm label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Doe" required />
+              </div>
+              <InputForm label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="jane@example.com" icon={Mail} required />
+              <InputForm label="Phone Number" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+1 234 567 890" icon={Phone} required />
+              <div className="grid grid-cols-2 gap-4">
+                <InputForm label="VGA Number" name="vgaNumber" value={formData.vgaNumber} onChange={handleChange} placeholder="VGA-1234" icon={Hash} />
+                <InputSelect label="Shirt Size" name="shirtSize" value={formData.shirtSize} onChange={handleChange} options={['S', 'M', 'L', 'XL', 'XXL', 'XXXL']} placeholder="Select Size" icon={Shirt} />
+              </div>
             </div>
-            <InputForm label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="jane@example.com" icon={Mail} required />
-            <InputForm label="Phone Number" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+1 234 567 890" icon={Phone} required />
-            <div className="grid grid-cols-2 gap-4">
-              <InputForm label="VGA Number" name="vgaNumber" value={formData.vgaNumber} onChange={handleChange} placeholder="VGA-1234" icon={Hash} />
-              <InputSelect label="Shirt Size" name="shirtSize" value={formData.shirtSize} onChange={handleChange} options={['S', 'M', 'L', 'XL', 'XXL', 'XXXL']} placeholder="Select Size" icon={Shirt} />
+
+            {/* Right Column */}
+            <div className="flex flex-col gap-6">
+              <h3 className="text-txt-dark font-bold font-outfit border-b border-gray-100 pb-2">Security & Profile</h3>
+              <div className="grid grid-cols-2 gap-4">
+                  <InputForm label="Password" name="password" type="password" value={formData.password} onChange={handleChange} placeholder="••••••" icon={Lock} required />
+                  <InputForm label="Confirm" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="••••••" required />
+              </div>
+              <InputForm label="Avatar URL (Optional)" name="profilePic" value={formData.profilePic} onChange={handleChange} placeholder="https://imgur.com/..." icon={ImageIcon} />
+              {/* <InputForm label="Bio (Optional)" name="bio" type="textarea" value={formData.bio} onChange={handleChange} placeholder="Tell us about your golf experience..." icon={AlignLeft} /> */}
+              <div className="flex flex-col gap-2">
+                <InputForm label="Profile Color (Hex)" name="bgColor" value={formData.bgColor} onChange={handleChange} placeholder="#64748b" icon={Palette} />
+                <input type="color" name="bgColor" value={formData.bgColor} onChange={handleChange} className="w-full h-10 cursor-pointer rounded-lg border border-gray-200" />
+              </div>
             </div>
+
           </div>
 
-          {/* Right Column */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-txt-dark font-bold font-outfit border-b border-gray-100 pb-2">Security & Profile</h3>
-            <div className="grid grid-cols-2 gap-4">
-                <InputForm label="Password" name="password" type="password" value={formData.password} onChange={handleChange} placeholder="••••••" icon={Lock} required />
-                <InputForm label="Confirm" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="••••••" required />
-            </div>
-            <InputForm label="Avatar URL (Optional)" name="profilePic" value={formData.profilePic} onChange={handleChange} placeholder="https://imgur.com/..." icon={ImageIcon} />
-            <InputForm label="Bio (Optional)" name="bio" type="textarea" value={formData.bio} onChange={handleChange} placeholder="Tell us about your golf experience..." icon={AlignLeft} />
-            <div className="flex flex-col gap-2">
-              <InputForm label="Profile Color (Hex)" name="bgColor" value={formData.bgColor} onChange={handleChange} placeholder="#64748b" icon={Palette} />
-              <input type="color" name="bgColor" value={formData.bgColor} onChange={handleChange} className="w-full h-10 cursor-pointer rounded-lg border border-gray-200" />
-            </div>
+          <div>
+            <MarkdownForm 
+              label="Bio (Optional)"
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              placeholder="Tell us about your golf experience..."
+              previewHeight="min-h-[150px] max-h-[300px]"
+            />
           </div>
 
           <div className="col-span-full flex flex-col gap-4 mt-4 pt-4 border-t border-gray-100">

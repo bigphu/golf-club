@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Element } from 'react-scroll';
 import homeBackground from '../assets/home-background.png'
-import { ImageSlider } from '@/components'; // Import component
+import { ImageSlider } from '@/components'; 
 
 const Home = () => {
   const [visibleSections, setVisibleSections] = useState({});
@@ -11,172 +11,103 @@ const Home = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setVisibleSections((prev) => ({
-              ...prev,
-              [entry.target.id]: true
-            }));
+            setVisibleSections((prev) => ({ ...prev, [entry.target.id]: true }));
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     const sections = document.querySelectorAll('[data-section]');
     sections.forEach((section) => observer.observe(section));
-
     return () => observer.disconnect();
   }, []);
 
+  const revealClass = (id) => 
+    `transition-all duration-1000 transform ${
+      visibleSections[id] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+    }`;
+
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed top-20 left-10 z-50 bg-white/80 backdrop-blur-sm p-4 rounded-lg">
-        <ul className="space-y-2">
-          <li>
-            <Link 
-              to="section1" 
-              smooth={true} 
-              duration={500}
-              className="cursor-pointer hover:text-txt-accent transition-colors"
-            >
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="section2" 
-              smooth={true} 
-              duration={500}
-              className="cursor-pointer hover:text-txt-accent transition-colors"
-            >
-
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="section3" 
-              smooth={true} 
-              duration={500}
-              className="cursor-pointer hover:text-txt-accent transition-colors"
-            >
-
-            </Link>
-          </li>
+    <>
+      {/* Navigation - Floating Indicator */}
+      <nav className="fixed right-10 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
+        <ul className="space-y-4">
+          {['hero', 'section1', 'section2', 'section3'].map((sec) => (
+            <li key={sec}>
+              <Link to={sec} smooth={true} duration={500} spy={true} activeClass="!bg-primary-accent"
+                className="block w-3 h-3 rounded-full bg-gray-300 cursor-pointer hover:scale-125 transition-all"
+              />
+            </li>
+          ))}
         </ul>
       </nav>
 
-      {/* Hero Section */}
-      <div className="grid grid-cols-12 min-h-screen items-center gap-8 px-8 relative">
-        {/* Text Content - Left Side */}
-        <div className='col-start-1 col-span-5 flex flex-col items-start justify-center gap-4 z-10'>
-          <div className='text-txt-primary text-8xl font-outfit font-extrabold'>
-            GOLF<br/>
-            CLUB<br/>
-            MANAGER
-          </div>
+      {/* Hero Section - Matching Tournaments Header Layout */}
+      <Element name="hero" className="col-start-2 col-span-10 min-h-[80vh] flex flex-col items-center justify-center text-center gap-6">
+        <div className='text-primary-accent text-8xl lg:text-9xl font-outfit font-extrabold leading-none'>
+          GOLF CLUB<br/><span className="text-secondary-accent">MANAGER</span>
         </div>
-
-        {/* Image - Right Side */}
-          <div className='col-start-30 col-span-30 flex flex-col items-start justify-center'>
-              <img className='bg-cover w-full h-full' src={homeBackground} alt="Golf Club Home">
-              </img>
-          </div>
-      </div>
-
-      {/* Section 1 */}
-      <Element name="section1">
-        <div 
-          id="section1"
-          data-section
-          className={`grid grid-cols-12 min-h-screen items-center gap-8 px-8 transition-all duration-1000 ${
-            visibleSections.section1 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}
-        >
-          <div className='col-start-2 col-span-10 lg:col-start-3 lg:col-span-40'>
-            <h2 className='text-txt-primary text-4xl lg:text-5xl font-outfit font-bold mb-6'>
-              This website provides you: 
-            </h2>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              Manage tournaments, view official club documents, and connect with other members seamlessly. 
-              Our platform provides everything you need to run a successful golf club.
-            </p>
-          </div>
-
-        </div>
+        <p className="text-xl text-secondary-accent font-roboto max-w-2xl">
+          The official platform for HCMUT golfers to manage tournaments, 
+          connect with alumni, and preserve club traditions.
+        </p>
+        <Link to="section1" smooth={true} className="mt-4 bg-primary-accent text-white px-10 py-4 rounded-full font-bold hover:opacity-90 transition-all cursor-pointer shadow-lg">
+          Explore Features
+        </Link>
       </Element>
 
-      {/* Section 2 */}
-      <Element name="section2">
-        <div 
-          id="section2"
-          data-section
-          className={`grid grid-cols-12 min-h-screen items-center gap-8 px-8 transition-all duration-1000 ${
-            visibleSections.section2 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}
-        >
-          <div className='col-start-2 col-span-10 lg:col-start-3 lg:col-span-40'>
-            <h2 className='text-txt-primary text-4xl lg:text-5xl font-outfit font-bold mb-6'>
-              Our History
-            </h2>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              In the spring of 2018, Professor ABC from the Faculty of Computer Science and Engineering stood at the intersection of two passions that had defined his life—the precision of technology and the timeless elegance of golf. As an avid golfer and pioneering computer scientist, he recognized an opportunity that few others could see: the chance to revolutionize golf club management through innovative technology. 
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              What began as casual weekend rounds with fellow faculty members soon evolved into something far more ambitious. Professor ABC envisioned a golf club that would break from tradition—not by abandoning it, but by enhancing it. He dreamed of a community where cutting-edge digital systems would seamlessly blend with the sport's centuries-old values of integrity, respect, and camaraderie.
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              With unwavering determination and support from the university community, Professor ABC established our golf club with a clear mission: to create a space where technology serves tradition, where data analytics meets the perfect swing, and where members can focus on what truly matters—the love of the game.
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              With unwavering determination and support from the university community, Professor ABC established our golf club with a clear mission: to create a space where technology serves tradition, where data analytics meets the perfect swing, and where members can focus on what truly matters—the love of the game.
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              From our first tournament managed entirely through a custom digital platform, to our innovative member connectivity system that fostered friendships beyond the fairways, we proved that embracing modern technology doesn't diminish golf's heritage—it elevates it.
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              Today, our club stands as a testament to Professor ABC's vision: a thriving community where every member benefits from the perfect marriage of tradition and innovation, where tournament management is effortless, club documents are always accessible, and connections between members flourish both on and off the course.
-            </p>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              This is more than a golf club. This is the future of the sport, rooted in its finest traditions.
-            </p>
-            
+      {/* Section 1: Features - Using your standard grid span */}
+      <Element name="section1" className="col-start-2 col-span-10 py-20">
+        <div id="section1" data-section className={revealClass('section1')}>
+          <h2 className="text-primary-accent text-5xl font-outfit font-bold mb-12 text-center">
+            Comprehensive Club Support
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: "Tournament Hub", desc: "Real-time updates, rosters, and request management for all club events." },
+              { title: "Document Center", desc: "Access official bylaws, membership rules, and historical archives." },
+              { title: "Community", desc: "Direct connectivity between current students and professional alumni." }
+            ].map((f, i) => (
+              <div key={i} className="p-8 bg-white/50 backdrop-blur-sm rounded-3xl border border-gray-100 shadow-sm">
+                <h3 className="text-2xl font-bold text-primary-accent mb-4">{f.title}</h3>
+                <p className="text-secondary-accent leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Element>
 
-
-
-      {/* Section 3*/}
-      <Element name="section3">
-        <div 
-          id="section3"
-          data-section
-          className={`grid grid-cols-12 min-h-screen items-center gap-8 px-8 transition-all duration-1000 ${
-            visibleSections.section3
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-10'
-          }`}
-        >
-          <div className='col-start-2 col-span-10 lg:col-start-3 lg:col-span-40'>
-            <h2 className='text-txt-primary text-4xl lg:text-5xl font-outfit font-bold mb-6'>
-              Our achievement
-            </h2>
+      {/* Section 2: History - Full width span with focused text */}
+      <Element name="section2" className="col-start-2 col-span-10 py-20">
+        <div id="section2" data-section className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${revealClass('section2')}`}>
+          <div>
+             <h2 className="text-primary-accent text-5xl font-outfit font-bold mb-6">Our Legacy</h2>
+             <div className="space-y-4 text-secondary-accent font-roboto text-lg leading-relaxed">
+                <p>Founded in 2018 by Professor ABC, our club represents the intersection of technology and tradition.</p>
+                <p>We believe that digital innovation shouldn't replace golf's values—it should protect them. Our platform ensures that tournament integrity and member connections remain at the forefront of the sport.</p>
+             </div>
           </div>
-          <div className='col-start-2 col-span-10 lg:col-start-10 lg:col-span-40'>
+          <div className="rounded-[40px] overflow-hidden shadow-2xl">
+            <img src={homeBackground} alt="Legacy" className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </Element>
+
+      {/* Section 3: Achievements - Centered slider */}
+      <Element name="section3" className="col-start-2 col-span-10 py-20 mb-20">
+        <div id="section3" data-section className={`text-center ${revealClass('section3')}`}>
+          <h2 className="text-primary-accent text-5xl font-outfit font-bold mb-10">Member Achievements</h2>
+          <div className="max-w-5xl mx-auto">
             <ImageSlider />
           </div>
-          <div className='col-start-2 col-span-10 lg:col-start-20 lg:col-span-40'>
-            <p className='text-txt-accent font-roboto font-medium text-base lg:text-lg leading-relaxed'>
-              These achievements proof for our growth and reunion of HCMUT students and alumni.
-            </p>
-          </div>
+          <p className="mt-10 text-secondary-accent font-medium italic">
+            Celebrating the growth and excellence of HCMUT golfers.
+          </p>
         </div>
       </Element>
-    </div>
+    </>
   )
 }
 
-export default Home
+export default Home;
