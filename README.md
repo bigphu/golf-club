@@ -1,5 +1,15 @@
 # ⛳ GOLF CULB MANAGER
 
+I Operated as a **fullstack developer**, managing multiple key areas across the entire project development cycle. 
+
+In particular, I am responsible for the website **UI/UX design** using **Figma**, focusing on creating an intuitive, student-friendly layout.
+
+Said design was brought to life by implementing a **fully functional, responsive frontend** utilizing the **ReactJS** framework. 
+
+In addtion, I contributed to the architecture and development of the **backend API** using **ExpressJS**, ensuring seamless and efficient data flow between the client and server.
+
+Finally, as my last role, a **MySQL database** was implemented to handle club activities and the application was **Dockerized** to ensure environment consistency.
+
 ## 🪟 Project Overview
 
 Golf Club Manager is a comprehensive web-based management system designed to streamline operations and enhance member engagement within a golf club community. The application provides an integrated platform that connects club administrators and members through a unified digital ecosystem, enabling efficient tournament organization, member management, and communication.
@@ -30,11 +40,11 @@ The primary objectives of Golf Club Manager are to:
 
 - **Frontend:**
 
-  - React 19.2 with Vite build tool
+  - **React** 19.2 with Vite build tool
 
   - React Router DOM for navigation
 
-  - Tailwind CSS for responsive design
+  - **Tailwind CSS** for responsive design
 
   - Lucide React icons library
 
@@ -42,19 +52,19 @@ The primary objectives of Golf Club Manager are to:
 
 - **Backend:**
 
-  - Node.js with Express.js framework
+  - Node.js with **ExpressJS** framework
 
-  - MySQL database driver
+  - **MySQL** database driver
 
-  - JWT for authentication and authorization
+  - **JWT** for authentication and authorization
 
-  - bcryptjs for password encryption
+  - **bcryptjs** for password encryption
 
-  - CORS for cross-origin requests
+  - **CORS** for cross-origin requests
 
 - **Database:**
 
-  - MySQL with stored procedures and triggers for business logic
+  - **MySQL** with stored procedures and triggers for business logic
 
   - Automatic timestamp management
 
