@@ -1,36 +1,37 @@
 # ⛳ Golf Club Manager
 
-A modern management platform for golf clubs that connects members, administrators, tournaments, and club content in one polished web app.
+A modern full-stack golf club administration platform that connects members, tournament organizers, and administrators in a single responsive web application.
 
-**Frontend:** React + Vite + Tailwind CSS
-**Backend:** Node.js + Express + MySQL
-**Deployment:** Docker Compose for local and containerized development
+- **Frontend:** React + Vite + Tailwind CSS
+- **Backend:** Node.js + Express + MySQL
+- **Deployment:** Docker Compose for local development and containerized services
 
 ## 📋 Overview
 
-Golf Club Manager is built to streamline golf club operations by combining:
+Golf Club Manager is designed to support golf club operations including membership onboarding, tournament event management, and club-wide content publishing. The platform helps administrators manage requests, track tournament participation, and keep members informed through notifications and document uploads.
 
-- membership requests and approval flows
+Main capabilities include:
+- secure registration and login
+- role-based access control
+- member directory and profile management
 - tournament creation, registration, and roster management
 - document and notification publishing
-- member directory and profile management
 
-The app supports two user roles:
+The app supports two primary user roles:
+- **Member** — browse tournaments, register for events, access content, and update profile details
+- **Admin** — approve membership requests, manage tournaments, publish documents/notifications, and view member data
 
-- **Member:** view tournaments, register for events, access documents, and update profile details
-- **Admin:** manage membership requests, create tournaments, publish content, and control user access
+## ✨ Key Features
 
-## ✨ Features
-
-- Secure user registration and login with JWT
-- Role-based authorization for protected workflows
-- Member directory with profile browsing
-- Tournament dashboard with creation, editing, registration, and roster views
+- JWT-based authentication and protected frontend routes
+- Role checks for administrator-only actions
+- Member directory with profile browsing and search
+- Tournament dashboard with overview, roster, and requests pages
 - Content hub for documents and notifications
-- Create/edit content with markdown-style support
-- Membership request review and approval
-- Responsive UI with reusable React components
-- Full Docker Compose setup for backend, frontend, and MySQL
+- Publish and edit club content
+- Membership request review and approval workflow
+- Responsive UI with reusable card, form, modal, and layout components
+- Fully containerized app using Docker Compose
 
 ## 🛠️ Technology Stack
 
@@ -39,7 +40,8 @@ The app supports two user roles:
 - Vite
 - Tailwind CSS
 - React Router DOM
-- React Markdown + remark-gfm
+- React Markdown
+- remark-gfm
 - Lucide React icons
 - date-fns
 
@@ -54,19 +56,20 @@ The app supports two user roles:
 ### Infrastructure
 - Docker Compose
 - MySQL 8.0 container
-- Backend and frontend containers with network bridging
+- Backend and frontend container networking
 
-## 🚀 Installation
+## 🚀 Installation Guide
 
 ### Option 1: Docker Compose
 
-1. Install and run Docker Desktop.
-2. From project root:
+1. Install Docker Desktop.
+2. Open a terminal at the project root.
+3. Run:
    ```bash
    docker compose up --build
    ```
-3. Frontend: `http://localhost:3000`
-4. Backend API: `http://localhost:5000/api`
+4. Visit the frontend at `http://localhost:3000`.
+5. The backend API is available at `http://localhost:5000/api`.
 
 ### Option 2: Run Locally
 
@@ -74,22 +77,21 @@ The app supports two user roles:
 
 1. `cd backend`
 2. `npm install`
-3. Create `.env` from `sample-env.txt`
+3. Copy `sample-env.txt` to `.env` and update values as needed
 4. `npm start`
 
 #### Frontend
 
 1. `cd frontend`
 2. `npm install`
-3. Create `.env` from `sample-env.txt`
+3. Copy `sample-env.txt` to `.env`
 4. `npm run dev`
 
-### Database Setup
+### Database Initialization
 
-If using Docker, the MySQL container loads SQL automatically from `mysql/init/`.
+When using Docker Compose, the MySQL container automatically loads SQL scripts from `mysql/init/`.
 
-For manual setup, run:
-
+For manual initialization, execute:
 1. `mysql/init/01_schema.sql`
 2. `mysql/init/02_procedures.sql`
 3. `mysql/init/03_triggers.sql`
@@ -98,70 +100,72 @@ For manual setup, run:
 ## 📦 Project Structure
 
 ### Root
-- `docker-compose.yaml` - service definitions for MySQL, backend, frontend
-- `README.md` - project documentation
-- `assets/` - documentation and presentation images
-- `mysql/init/` - database schema and initialization scripts
+- `docker-compose.yaml` — service definitions for MySQL, backend, and frontend
+- `README.md` — project documentation
+- `assets/` — supplemental images and documentation assets
+- `mysql/init/` — database schema, stored procedures, triggers, and seed data
 
 ### Backend
-- `backend/Dockerfile` - backend container build file
-- `backend/package.json` - backend dependencies and scripts
-- `backend/server.js` - Express server entry point
-- `backend/config/db.js` - database connection helper
-- `backend/controllers/` - request handlers and business logic
-- `backend/middlewares/authMiddleware.js` - JWT and role guard middleware
-- `backend/models/` - database access abstractions
-- `backend/routes/` - API route definitions
-- `backend/sample-env.txt` - example environment variables
+- `backend/Dockerfile` — backend container build definition
+- `backend/package.json` — dependencies and npm scripts
+- `backend/server.js` — Express application entry point
+- `backend/config/db.js` — MySQL connection setup
+- `backend/controllers/` — request handlers and app logic
+- `backend/middlewares/authMiddleware.js` — JWT auth and role authorization middleware
+- `backend/models/` — database query helpers and data access abstractions
+- `backend/routes/` — API route registration and module mounting
+- `backend/sample-env.txt` — example backend environment variables
 
 ### Frontend
-- `frontend/Dockerfile` - frontend container build file
-- `frontend/package.json` - frontend dependencies and scripts
-- `frontend/sample-env.txt` - example API environment variable
-- `frontend/src/main.jsx` - React entry point
-- `frontend/src/App.jsx` - route configuration
-- `frontend/src/context/AuthContext.jsx` - authentication state management
-- `frontend/src/services/api.js` - API request helper
-- `frontend/src/pages/` - page components and layouts
-- `frontend/src/components/` - reusable UI components
-- `frontend/src/hooks/` - custom hooks
-- `frontend/src/utils/` - utility functions
+- `frontend/Dockerfile` — frontend container build definition
+- `frontend/package.json` — frontend dependencies and scripts
+- `frontend/sample-env.txt` — example frontend environment variables
+- `frontend/src/main.jsx` — React app bootstrap
+- `frontend/src/App.jsx` — routing, protected route wrapper, and layout composition
+- `frontend/src/context/AuthContext.jsx` — authentication state provider
+- `frontend/src/services/api.js` — centralized API request helper
+- `frontend/src/pages/` — top-level page views and nested page layouts
+- `frontend/src/components/` — reusable UI components for cards, forms, layout, and navigation
+- `frontend/src/hooks/` — custom hooks for forms, filtering, role checks, and UI behavior
+- `frontend/src/utils/` — shared utilities for date formatting, pagination, and status display
 
-## 🧩 API Endpoints
+## 🔌 API Overview
 
-- `POST /api/register` - register a new user
-- `POST /api/login` - authenticate user and return token
-- `GET /api/profile` - get current user profile
-- `PUT /api/profile` - update profile
-- `GET /api/users` - member directory
-- `GET /api/requests` - membership requests
-- `POST /api/requests/manage` - approve/reject requests
-- `GET /api/tournaments` - tournament list
-- `POST /api/tournaments/create` - create tournament
-- `GET /api/tournaments/:id` - tournament detail
-- `PUT /api/tournaments/:id` - update tournament
-- `POST /api/tournaments/register` - register for tournament
-- `POST /api/tournaments/manage` - manage tournament applications
-- `GET /api/documents` - list documents
-- `GET /api/notifications` - list notifications
-- `POST /api/create` or `/api/content/create` - add new document/notification
-- `PUT /api/:id` or `/api/content/:id` - update content item
+Core backend endpoints are exposed under `/api`:
 
-> Content routes support both direct `/api/documents` access and `/api/content/...` creation paths.
+- `POST /api/register` — register a new user
+- `POST /api/login` — authenticate and receive a JWT
+- `GET /api/profile` — fetch the current logged-in user's profile
+- `PUT /api/profile` — update profile information
+- `GET /api/users` — retrieve member directory data
+- `GET /api/requests` — list membership requests
+- `POST /api/requests/manage` — approve or reject requests
+- `GET /api/tournaments` — fetch tournaments
+- `POST /api/tournaments/create` — create a tournament
+- `GET /api/tournaments/:id` — fetch tournament details
+- `PUT /api/tournaments/:id` — update a tournament
+- `POST /api/tournaments/register` — register for a tournament
+- `POST /api/tournaments/manage` — manage tournament registrations and approvals
+- `GET /api/documents` — list published documents
+- `GET /api/notifications` — list published notifications
+- `POST /api/create` or `/api/content/create` — create new document/notification content
+- `PUT /api/:id` or `/api/content/:id` — update content items
 
-## 🔮 Future Plans
+## 🎯 Why This Project Matters
 
-- Add file upload support for documents and tournament resources
-- Add real-time notifications or chat for members
-- Add analytics dashboard for tournament and user statistics
-- Implement email reminders for registration and approvals
-- Expand role management with audit trails
-- Add automated tests for frontend and backend
-- Improve mobile responsiveness and accessibility
-- Support multi-language / i18n
+Golf Club Manager is built to reduce administrative overhead for club organizers while improving member engagement. It centralizes event planning, approval workflows, member directories, and club announcements in a unified interface.
 
-## 🤝 Notes
+## 🌱 Future Roadmap
 
-- Designed for easy expansion with separate frontend, backend, and database layers.
-- Docker Compose makes full-stack setup fast and repeatable.
-- Ideal for club administration, event management, and member communication.
+- Add file uploads for documents, tournament media, and member resources
+- Implement email notifications for event registration, approvals, and announcements
+- Add real-time member updates or chat using WebSockets
+- Build analytics and reporting dashboards for tournaments and membership activity
+- Add frontend and backend automated tests
+- Improve accessibility and mobile responsiveness
+- Add internationalization (i18n) support
+- Extend role management with audit logs and admin activity tracking
+
+## 📌 Notes
+
+The architecture separates frontend, backend, and database concerns so the app can scale naturally and be extended with new features without tight coupling. Docker Compose provides a consistent, reproducible environment for developers.
